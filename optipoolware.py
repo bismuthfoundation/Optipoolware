@@ -5,9 +5,10 @@
 # .
 
 import socketserver, connections, time, options, log, sqlite3, socks, hashlib, random, re, essentials, base64, sys, os, math
-from Crypto.Signature import PKCS1_v1_5
-from Crypto.Hash import SHA
-from Crypto import Random
+from Cryptodome import Random
+from Cryptodome.Hash import SHA
+from Cryptodome.Signature import PKCS1_v1_5
+from Cryptodome.PublicKey import RSA
 import threading
 import statistics
 import json
@@ -19,10 +20,10 @@ config = options.Get()
 config.read()
 port = config.port
 node_ip_conf = config.node_ip
-ledger_path_conf = config.ledger_path_conf
-tor_conf = config.tor_conf
-debug_level_conf = config.debug_level_conf
-version = config.version_conf
+ledger_path_conf = "static/test.db"
+#tor_conf = config.tor
+debug_level_conf = config.debug_level
+version = config.version
 
 if version == "testnet":
     port = "2829"
@@ -463,7 +464,6 @@ if checkdb():
 class MyTCPHandler(socketserver.BaseRequestHandler):
 
     def handle(self):
-        from Crypto.PublicKey import RSA
         key = RSA.importKey(private_key_readable)
 
         self.allow_reuse_address = True
@@ -552,14 +552,14 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
                         except:
                             cnode_ip_conf = cn.node_ip
 
-                        ctor_conf = cn.tor_conf
-                        cversion = cn.version_conf
+                        #ctor_conf = cn.tor_conf
+                        #cversion = cn.version_conf
 
-                        if cversion == "testnet":
-                            cport = "2829"
-                            m_peer_file = "peers_test.txt"
-                        else:
-                            m_peer_file = "peers.txt"
+                        #if cversion == "testnet":
+                        cport = "2829"
+                        m_peer_file = "peers_test.txt"
+                        #else:
+                        #    m_peer_file = "peers.txt"
 
                         app_log.warning("Local node ip {} on port {}".format(cnode_ip_conf, cport))
 
@@ -626,8 +626,8 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
                                 try:
                                     s = socks.socksocket()
                                     s.settimeout(0.3)
-                                    if ctor_conf == 1:
-                                        s.setproxy(socks.PROXY_TYPE_SOCKS5, "127.0.0.1", 9050)
+                                    #if ctor_conf == 1:
+                                    #    s.setproxy(socks.PROXY_TYPE_SOCKS5, "127.0.0.1", 9050)
                                     s.connect((peer_ip, int(peer_port)))  # connect to node in peerlist
                                     app_log.warning("Connected")
 
@@ -725,3 +725,4 @@ if __name__ == "__main__":
         server.server_close()
     finally:
         mining.mining_close()
+
