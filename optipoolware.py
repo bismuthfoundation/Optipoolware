@@ -1,4 +1,4 @@
-# optipoolware.py v 0.396 to be used with Python3.5
+# optipoolware.py v 0.397 to be used with Python3.5 or later
 # Bismuth pool mining software
 # Copyright Hclivess, Maccaspacca 2017, 2018
 # for license see LICENSE file
@@ -536,7 +536,7 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
                     """
                     mining_hash = bin_convert_orig(hashlib.sha224((address + nonce + db_block_hash).encode("utf-8")).hexdigest())
                     mining_condition = bin_convert_orig(db_block_hash)[0:diff]
-                    
+
                     if mining_condition in mining_hash:
                     """
                     if real_diff >= int(diff):
@@ -553,13 +553,13 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
                             cnode_ip_conf = cn.node_ip
 
                         #ctor_conf = cn.tor_conf
-                        #cversion = cn.version_conf
+                        cversion = cn.version
 
-                        #if cversion == "testnet":
-                        cport = "2829"
-                        m_peer_file = "peers_test.txt"
-                        #else:
-                        #    m_peer_file = "peers.txt"
+                        if cversion == "testnet":
+                            cport = "2829"
+                            m_peer_file = "peers_test.txt"
+                        else:
+                            m_peer_file = "peers.txt"
 
                         app_log.warning("Local node ip {} on port {}".format(cnode_ip_conf, cport))
 
@@ -725,4 +725,3 @@ if __name__ == "__main__":
         server.server_close()
     finally:
         mining.mining_close()
-
