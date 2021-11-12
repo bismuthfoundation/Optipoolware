@@ -1,7 +1,7 @@
 pyinstaller
 flask
 pycryptodome
-simple-crypt --no-deps
+simple-crypt
 PySocks
 requests
 tornado
