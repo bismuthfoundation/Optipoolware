@@ -20,7 +20,7 @@ config = options.Get()
 config.read()
 port = config.port
 node_ip_conf = config.node_ip
-ledger_path_conf = "static/test.db"
+ledger_path_conf = "static/ledger.db"
 #tor_conf = config.tor
 debug_level_conf = config.debug_level
 version = config.version
@@ -28,7 +28,7 @@ version = config.version
 if version == "testnet":
     port = "2829"
     m_peer_file = "peers_test.txt"
-
+    ledger_path_conf = "static/test.db"
 else:
     m_peer_file = "peers.txt"
 
